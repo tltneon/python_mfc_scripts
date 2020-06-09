@@ -1,0 +1,26 @@
+import os
+from os.path import isfile, join
+from shutil import copyfile
+
+mypath = "Платёжки"
+onlyfiles = [f for f in os.listdir(mypath) if isfile(join(mypath, f))]
+newname = onlyfiles[0][0:8]
+
+toadd = b''
+for i in onlyfiles:
+        with open(mypath + '/' + i, 'rb') as file_to_read:
+                content = file_to_read.read()
+                toadd += content[-45:]
+
+copyfile('_/ori.gn', mypath + '/' + newname + '.dbf')
+with open(mypath + '/' + newname + '.dbf', 'ab') as total:
+    total.write(toadd)
+content = b''
+with open(mypath + '/' + newname + '.dbf', 'rb') as total:
+    content = total.read()
+
+part1 = content[0:4]
+part2 = content[5:]
+with open(mypath + '/' + newname + '.dbf', 'wb') as total:
+    total.write(part1+chr(len(onlyfiles)).encode('utf-8')+part2)
+# по вопросам работоспособности: shokin_vi@mfc63.ru

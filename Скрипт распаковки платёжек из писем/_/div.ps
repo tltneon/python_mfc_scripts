@@ -1,0 +1,23 @@
+def lookupDate(content):
+        qwe = ''
+        for i in re.findall('(\d{17,30})', content):
+                qwe = i
+        qwe = qwe[:-11]
+        qwe = qwe[-8:]
+        return [qwe[6:8], qwe[4:6], qwe[0:4]]        
+
+import os, re
+from os.path import isfile, join
+from shutil import copyfile
+mypath = "Платёжки"
+onlyfiles = [f for f in os.listdir(mypath) if isfile(join(mypath, f))]
+
+for i in onlyfiles:
+        with open(mypath + '/' + i, 'r') as file_to_read:
+                date = lookupDate(file_to_read.read())
+                loc = mypath + '/Отсортированные/оплата почта '+ date[0]+'.'+date[1] +'/'
+                if not os.path.exists(loc):
+                    os.makedirs(loc)
+                    copyfile('_/ori.gn', loc + '_za_' + date[0]+'_'+date[1]+'_'+date[2]+'.dbf')
+                copyfile(mypath + '/' + i, loc + i)
+# по вопросам работоспособности: shokin_vi@mfc63.ru
