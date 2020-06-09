@@ -1,0 +1,22 @@
+def removeSpaces(base):
+	result = ""
+	for i in base.splitlines():
+		result = result + i
+	return result;
+
+from base64 import decodebytes
+from os import listdir
+from os.path import isfile, join
+mypath = "Письма"
+onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
+
+for i in onlyfiles:
+	with open(mypath + '/' + i, 'r') as file_to_read:
+		content = file_to_read.read()
+		attach = content[content.find("filename="):]
+		name = attach[attach.find('"')+1:attach.find(".dbf")+4]
+		base64_ = removeSpaces(attach[attach.find(".dbf")+6:attach.find(".dbf")+324+8]).encode('ascii')
+		with open('Платёжки/' + name, 'wb') as file_to_save:
+			decoded_image_data = decodebytes(base64_)
+			file_to_save.write(decoded_image_data)
+# по вопросам работоспособности: shokin_vi@mfc63.ru
